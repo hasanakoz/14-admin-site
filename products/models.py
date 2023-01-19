@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
@@ -16,3 +17,7 @@ class Product(models.Model):
     
     def __str__(self):
         return self.name
+
+    # def added_days_ago(self):
+    #     fark = timezone.now() - self.create_date
+    #     return fark.days
