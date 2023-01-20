@@ -1,5 +1,5 @@
 from products.models import  Product
-from faker1 import Faker
+from faker import Faker
 
 def run1():
     '''

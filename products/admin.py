@@ -1,11 +1,16 @@
 from django.contrib import admin
-from .models import Product
+from .models import Product, Review
 from django.utils import timezone
 
 # Register your models here.
 
+class ReviewInline(admin.TabularInline):
+    model = Review
+    extra = 1
+    classes = ('collapse',)
+
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("name", "create_date", "is_in_stock", "update_date", "added_days_ago")
+    list_display = ("name", "create_date", "is_in_stock", "update_date", "added_days_ago", "how_many_reviews")
     list_editable = ("is_in_stock",)
     # list_display_links = ("create_date",)
     list_filter = ("create_date", "is_in_stock")
@@ -14,6 +19,8 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     list_per_page = 25
     date_hierarchy = "update_date"
+
+    inlines = (ReviewInline,)
     # fieldsets = (
     #     (None, {
     #         "fields": (
@@ -39,8 +46,14 @@ class ProductAdmin(admin.ModelAdmin):
         fark = timezone.now() - product.create_date
         return fark.days
 
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ("__str__", "created_date", "is_released")
+    list_per_page = 50
+    raw_id_fields = ("product",) 
+
 
 admin.site.register(Product, ProductAdmin)
+admin.site.register(Review)
 
 admin.site.site_title = "Admin Title"
 admin.site.site_header = "Hasan Admin Portal"
